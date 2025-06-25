@@ -1,0 +1,45 @@
+name: 'Terraform Deploy [Dev]'
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  deploy:
+    name: 'Deploy Terraform to Dev'
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    defaults:
+      run:
+        working-directory: environments/dev 
+
+    steps:
+      - name: 'Checkout Code'
+        uses: actions/checkout@v3
+
+      - name: 'Configure AWS Credentials'
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: 'Install Terraform'
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.0
+
+      - name: 'Terraform Init'
+        run: terraform init
+
+      - name: 'Terraform Validate'
+        run: terraform validate
+
+      - name: 'Terraform Plan'
+        run: terraform plan -var-file=terraform.tfvars
+
+      - name: 'Terraform Apply'
+        run: terraform apply -auto-approve -var-file=terraform.tfvars
