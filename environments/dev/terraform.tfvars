@@ -1,1 +1,1 @@
-bucket_name = "randon-bucket-name"
+bucket_name = "tutorial-terraform-tfstate-ocean"
