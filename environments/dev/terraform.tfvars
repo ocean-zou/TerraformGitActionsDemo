@@ -1,1 +1,1 @@
-bucket_name = "tutorial-terraform-tfstate-ocean"
+bucket_name = "tutorial-terraform-tfstate-ocean-module"
